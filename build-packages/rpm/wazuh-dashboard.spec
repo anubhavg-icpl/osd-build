@@ -44,7 +44,7 @@ Wazuh dashboard is a user interface and visualization tool for security-related 
 
 %prep
 
-cp /opt/%{DASHBOARD_FILE} ./
+cp /tmp/%{DASHBOARD_FILE} ./
 
 groupadd %{GROUP}
 useradd -g %{GROUP} %{USER}
@@ -90,12 +90,6 @@ find %{buildroot}%{INSTALL_DIR} -exec chown %{USER}:%{GROUP} {} \;
 find %{buildroot}%{CONFIG_DIR} -exec chown %{USER}:%{GROUP} {} \;
 
 chown root:root %{buildroot}/etc/systemd/system/wazuh-dashboard.service
-
-find %{buildroot}%{INSTALL_DIR}/plugins/wazuh/ -exec chown %{USER}:%{GROUP} {} \;
-find %{buildroot}%{INSTALL_DIR}/plugins/wazuh/ -type f -perm 644 -exec chmod 640 {} \;
-find %{buildroot}%{INSTALL_DIR}/plugins/wazuh/ -type f -perm 755 -exec chmod 750 {} \;
-find %{buildroot}%{INSTALL_DIR}/plugins/wazuh/ -type d -exec chmod 750 {} \;
-find %{buildroot}%{INSTALL_DIR}/plugins/wazuh/ -type f -perm 744 -exec chmod 740 {} \;
 
 # -----------------------------------------------------------------------------
 
@@ -191,7 +185,6 @@ if [ -f %{INSTALL_DIR}/wazuh-dashboard.restart ]; then
   fi
 
 fi
-
 
 # -----------------------------------------------------------------------------
 
@@ -381,11 +374,26 @@ rm -fr %{buildroot}
 %attr(640, %{USER}, %{GROUP}) "%{INSTALL_DIR}/src/legacy/ui/ui_render/bootstrap/osd_bundles_loader_source.js"
 %attr(640, %{USER}, %{GROUP}) "%{INSTALL_DIR}/src/legacy/ui/ui_render/bootstrap/index.js"
 %attr(640, %{USER}, %{GROUP}) "%{INSTALL_DIR}/src/legacy/ui/ui_render/bootstrap/template.js.hbs"
+%attr(640, %{USER}, %{GROUP}) "%{INSTALL_DIR}/src/legacy/ui/ui_render/bootstrap/startup.js.hbs"
 %attr(640, %{USER}, %{GROUP}) "%{INSTALL_DIR}/src/legacy/ui/ui_render/bootstrap/app_bootstrap.js"
 %attr(640, %{USER}, %{GROUP}) "%{INSTALL_DIR}/src/legacy/ui/index.js"
 %attr(640, %{USER}, %{GROUP}) "%{INSTALL_DIR}/src/legacy/ui/apm/index.js"
 %attr(640, %{USER}, %{GROUP}) "%{INSTALL_DIR}/src/docs/docs_repo.js"
 %attr(640, %{USER}, %{GROUP}) "%{INSTALL_DIR}/src/docs/cli.js"
+%attr(640, %{USER}, %{GROUP}) "%{INSTALL_DIR}/src/translations/de-DE.json"
+%attr(640, %{USER}, %{GROUP}) "%{INSTALL_DIR}/src/translations/es-419.json"
+%attr(640, %{USER}, %{GROUP}) "%{INSTALL_DIR}/src/translations/es-ES.json"
+%attr(640, %{USER}, %{GROUP}) "%{INSTALL_DIR}/src/translations/fr-CA.json"
+%attr(640, %{USER}, %{GROUP}) "%{INSTALL_DIR}/src/translations/fr-FR.json"
+%attr(640, %{USER}, %{GROUP}) "%{INSTALL_DIR}/src/translations/id-ID.json"
+%attr(640, %{USER}, %{GROUP}) "%{INSTALL_DIR}/src/translations/it-IT.json"
+%attr(640, %{USER}, %{GROUP}) "%{INSTALL_DIR}/src/translations/ja-JP.json"
+%attr(640, %{USER}, %{GROUP}) "%{INSTALL_DIR}/src/translations/ko-KR.json"
+%attr(640, %{USER}, %{GROUP}) "%{INSTALL_DIR}/src/translations/pt-PT.json"
+%attr(640, %{USER}, %{GROUP}) "%{INSTALL_DIR}/src/translations/tr-TR.json"
+%attr(640, %{USER}, %{GROUP}) "%{INSTALL_DIR}/src/translations/zh-CN.json"
+%attr(640, %{USER}, %{GROUP}) "%{INSTALL_DIR}/src/translations/zh-TW.json"
+%attr(640, %{USER}, %{GROUP}) "%{INSTALL_DIR}/src/translations/pt-BR.json"
 %attr(640, %{USER}, %{GROUP}) "%{INSTALL_DIR}/package.json"
 %attr(640, %{USER}, %{GROUP}) "%{INSTALL_DIR}/LICENSE.txt"
 %attr(640, %{USER}, %{GROUP}) "%{INSTALL_DIR}/NOTICE.txt"

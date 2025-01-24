@@ -12,6 +12,7 @@ FILE_OWNER="wazuh-dashboard"
 # Remove container and image
 clean() {
   docker stop $CONTAINER_NAME
+  docker rm $CONTAINER_NAME
   docker rmi $CONTAINER_NAME
 }
 
@@ -106,17 +107,21 @@ check_metadata_rpm() {
   echo "metadata package is correct: $metadataPackage"
 }
 
+source ../utils/retry-operation.sh
+
 # Run test
 test() {
 
   if [[ $PACKAGE == *".deb" ]]; then
-    docker build --build-arg PACKAGE=$PACKAGE -t $CONTAINER_NAME ./deb/
-    docker run -it --rm -d --name $CONTAINER_NAME $CONTAINER_NAME
-    check_metadata_deb
+    retry_operation "test deb package" 5 15 \
+            "docker build --build-arg PACKAGE=$PACKAGE -t $CONTAINER_NAME ./deb/ && \
+            docker run -it --rm -d --name $CONTAINER_NAME $CONTAINER_NAME && \
+            check_metadata_deb" || exit 1
   elif [[ $PACKAGE == *".rpm" ]]; then
-    docker build --build-arg PACKAGE=$PACKAGE -t $CONTAINER_NAME ./rpm/
-    docker run -it --rm -d --name $CONTAINER_NAME $CONTAINER_NAME
-    check_metadata_rpm
+    retry_operation "test rpm package" 5 15 \
+            "docker build --build-arg PACKAGE=$PACKAGE -t $CONTAINER_NAME ./rpm/ && \
+            docker run -it --rm -d --name $CONTAINER_NAME $CONTAINER_NAME && \
+            check_metadata_rpm" || exit 1
   else
     echo "ERROR: $PACKAGE is not a valid package (valid packages are .deb and .rpm ))"
     exit 1
